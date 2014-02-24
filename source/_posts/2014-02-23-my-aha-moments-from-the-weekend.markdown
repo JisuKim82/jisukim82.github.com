@@ -9,7 +9,7 @@ This past week was a bit hectic for me considering the pace picked up at the Fla
 
 
 
-![image](../images/jackie-chan-mind-blown.jpeg)
+![image](http://jisukim82.github.io/images/jackie-chan-mind-blown.jpeg)
 
 
 ###1. Modules should have abstract values
