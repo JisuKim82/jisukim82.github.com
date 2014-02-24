@@ -9,8 +9,7 @@
   <meta name="author" content="Jisu Kim">
 
   
-  <meta name="description" content="First post to Octopress
-">
+  <meta name="description" content="This past week was a bit hectic for me considering the pace picked up at the Flatiron School and on top I had to prepare for a meetup. I managed to &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -39,7 +38,7 @@
   <header role="banner"><hgroup>
   <h1><a href="/">Jisu's Blog</a></h1>
   
-    <h2>A blogging framework for hackers.</h2>
+    <h2>Breathe Deep!</h2>
   
 </hgroup>
 
@@ -72,6 +71,219 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2014/02/23/my-aha-moments-from-the-weekend/">My &#8216;Aha&#8217; Moments From the Weekend</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-02-23T11:35:24-05:00" pubdate data-updated="true">Feb 23<span>rd</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>This past week was a bit hectic for me considering the pace picked up at the Flatiron School and on top I had to prepare for a <a href="http://www.meetup.com/nyc-on-rails/events/166756172/">meetup</a>. I managed to make it through the week and after getting 12 hrs of much needed sleep on Saturday I went about reviewing the recorded lectures. By revisiting these lectures I had several &lsquo;Aha&rsquo; moments and would like to share them. I apologize in advance if you already know this but for me&hellip;</p>
+
+<p><img src="../images/jackie-chan-mind-blown.jpeg" alt="image" /></p>
+
+<h3>1. Modules should have abstract values</h3>
+
+<p>Don&rsquo;t rely on literal values! A major problem with relying on literal values is scope. In the example below on line 4 the <strong>@@all</strong> variable should be encapsulated in a method.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">module</span> <span class="nn">Rankable</span>
+</span><span class='line'>  <span class="k">module</span> <span class="nn">ClassMethods</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">top_5</span>
+</span><span class='line'>      <span class="vc">@@all</span><span class="o">.</span><span class="n">sort_by</span> <span class="p">{</span><span class="o">|</span><span class="n">s</span><span class="o">|</span><span class="n">s</span><span class="o">.</span><span class="n">rank</span><span class="p">}</span><span class="o">[</span><span class="mi">0</span><span class="o">.</span><span class="n">.</span><span class="mi">4</span><span class="o">]</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The fix is to encapsulate <strong>@@all</strong> in a method resulting in the following code.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">module</span> <span class="nn">Rankable</span>
+</span><span class='line'>  <span class="k">module</span> <span class="nn">ClassMethods</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">top_5</span>
+</span><span class='line'>      <span class="nb">self</span><span class="o">.</span><span class="n">all</span><span class="o">.</span><span class="n">sort_by</span> <span class="p">{</span><span class="o">|</span><span class="n">s</span><span class="o">|</span><span class="n">s</span><span class="o">.</span><span class="n">rank</span><span class="p">}</span><span class="o">[</span><span class="mi">0</span><span class="o">.</span><span class="n">.</span><span class="mi">4</span><span class="o">]</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>2. Order Matters</h3>
+
+<p>When listing the files to load up it should be</p>
+
+<pre><code>1. Gems 
+2. Concerns(Modules) 
+3. Models(Classes)
+</code></pre>
+
+<p>The following code would break because the module line 3 is loaded after the model(Student Class)</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;sqlite3&#39;</span>
+</span><span class='line'><span class="n">require_relative</span> <span class="s1">&#39;../lib/student&#39;</span> <span class="c1">#class Student</span>
+</span><span class='line'><span class="n">require_relative</span> <span class="s1">&#39;../lib/concerns/persistable&#39;</span> <span class="c1">#module Persistable</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The fix is to load it in the correct order.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;sqlite3&#39;</span>
+</span><span class='line'><span class="n">require_relative</span> <span class="s1">&#39;../lib/concerns/persistable&#39;</span> <span class="c1">#module Persistable</span>
+</span><span class='line'><span class="n">require_relative</span> <span class="s1">&#39;../lib/student&#39;</span> <span class="c1">#class Student</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>3. Be Weary of Class Variables<strong>(@@)</strong></h3>
+
+<p>Class variables can leak due to inheritance. For example in the following code when a new Dog instance is created the @@breeds will be overwritten to <strong>[:affenpoo]</strong>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Dog</span>
+</span><span class='line'>  <span class="vc">@@breeds</span> <span class="o">=</span> <span class="o">[</span><span class="ss">:poodle</span><span class="p">,</span> <span class="ss">:pug</span><span class="o">]</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">Poodle</span> <span class="o">&lt;</span> <span class="no">Dog</span>
+</span><span class='line'>  <span class="vc">@@breeds</span> <span class="o">=</span> <span class="o">[</span><span class="ss">:affenpoo</span><span class="o">]</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To avoid possible leaks, class CONSTANTS should be used. The following would fix the problem above and when a new Dog instance is created the BREEDS constant in the Dog class will remain <strong>[:poodle, :pug]</strong>. Likewise the BREEDS constant in the Poodle class will remain <strong>[:affenpoo]</strong>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Dog</span>
+</span><span class='line'>  <span class="no">BREEDS</span> <span class="o">=</span> <span class="o">[</span><span class="ss">:poodle</span><span class="p">,</span> <span class="ss">:pug</span><span class="o">]</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">Poodle</span> <span class="o">&lt;</span> <span class="no">Dog</span>
+</span><span class='line'>  <span class="no">BREEDS</span> <span class="o">=</span> <span class="o">[</span><span class="ss">:affenpoo</span><span class="o">]</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>4. All Methods Must Have a Receiver</h3>
+
+<p>All methods must have a receiver and if not defined it is <strong><em>self</em></strong>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Movie</span>
+</span><span class='line'>  <span class="kp">attr_accessor</span> <span class="ss">:name</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">save</span>
+</span><span class='line'>    <span class="no">DB</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;INSERT INTO movies(name) VALUES (?)&quot;</span><span class="p">,</span> <span class="nb">name</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>
+In line 4 the last argument <strong>&lsquo;name&rsquo;</strong> is not a variable. The way ruby determines this is by first looking for a variable called &lsquo;name&rsquo;. If not defined it then looks for method called name which is defined on line 2 <strong>&ldquo;attr_accessor :name&rdquo;</strong>.</p>
+
+<h3>5. Found Another Tool &ndash; The Tap Method</h3>
+
+<p>What the tap method does is yields x to the block and then returns x.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">new_from_db</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">s</span><span class="o">=</span><span class="nb">self</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'>  <span class="n">s</span><span class="o">.</span><span class="n">id</span><span class="o">=</span><span class="n">row</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span>
+</span><span class='line'>  <span class="n">s</span><span class="o">.</span><span class="n">name</span><span class="o">=</span><span class="n">row</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span>
+</span><span class='line'>  <span class="n">s</span><span class="o">.</span><span class="n">tagline</span><span class="o">=</span><span class="n">row</span><span class="o">[</span><span class="mi">2</span><span class="o">]</span>
+</span><span class='line'>  <span class="n">s</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Using the tap method</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">new_from_db</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+</span><span class='line'>  <span class="nb">self</span><span class="o">.</span><span class="n">new</span><span class="o">.</span><span class="n">tap</span> <span class="k">do</span> <span class="o">|</span><span class="n">s</span><span class="o">|</span>
+</span><span class='line'>    <span class="n">s</span><span class="o">.</span><span class="n">id</span><span class="o">=</span><span class="n">row</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span>
+</span><span class='line'>    <span class="n">s</span><span class="o">.</span><span class="n">name</span><span class="o">=</span><span class="n">row</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span>
+</span><span class='line'>    <span class="n">s</span><span class="o">.</span><span class="n">tagline</span><span class="o">=</span><span class="n">row</span><span class="o">[</span><span class="mi">2</span><span class="o">]</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2014/02/10/hello-world/">Hello World</a></h1>
     
     
@@ -95,7 +307,7 @@
   </header>
 
 
-  <div class="entry-content"><p>First post to Octopress</p>
+  <div class="entry-content"><p>First post to Octopress!</p>
 </div>
   
   
@@ -111,9 +323,23 @@
 </div>
 <aside class="sidebar">
   
-    <section>
+    
+<section>
+  <span>
+    <img src="http://www.gravatar.com/avatar/84663ccf6816686004874b05eb8316ae?s=185" alt="Gravatar of Jisu Kim " title="Gravatar of Jisu Kim" />
+  </span>
+</section>
+<section>
+  <h1>About Me</h1>
+  <p>Currently a student at the Flatiron School.</p>
+</section>
+<section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/02/23/my-aha-moments-from-the-weekend/">My &#8216;Aha&#8217; Moments From the Weekend</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/02/10/hello-world/">Hello World</a>
@@ -125,12 +351,6 @@
 
 
 
-
-<section>
-  <span>
-    <img src="http://www.gravatar.com/avatar/84663ccf6816686004874b05eb8316ae?s=185" alt="Gravatar of Jisu Kim " title="Gravatar of Jisu Kim" />
-  </span>
-</section>
 
   
 </aside>
