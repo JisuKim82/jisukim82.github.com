@@ -6,4 +6,4 @@ comments: true
 categories: blog
 ---
 
-First post to Octopress
+First post to Octopress!
