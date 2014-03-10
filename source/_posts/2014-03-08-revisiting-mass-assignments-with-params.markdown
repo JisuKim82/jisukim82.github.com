@@ -98,11 +98,11 @@ params == {
 ```
 Notice within the **\<input>** controls: `name="user[name]"`, `name="user[email]"`, `name="user[password]"`. Using this naming convention we are able to get back the desired params hash because both **user** and **[attribute]** are keys to the input value.
 
-Also because our naming covention will return a hash - the order of which the form labels are arranged does not affect the mass assignment. However, the last key value must be identical to the column name of the attribute assigned.
+Also because our naming convention will return a hash - the order of which the form labels are arranged does not affect the mass assignment. However, the last key value must be identical to the column name of the attribute assigned.
 
 Based on the naming convention above our migration table should look like below
 
-(_Note_: I mixed up the order of the columns to show that order doesn't matter but the name attributes **must** match the last key of the params hash)
+(_Note_: I mixed up the order of the columns to show that order doesn't matter but the column names **must** match the last key of the params hash)
 
 ```ruby 01_create_users.rb
 class CreateUsers < ActiveRecord::Migration
@@ -117,28 +117,21 @@ class CreateUsers < ActiveRecord::Migration
 end
 ```
 
-Column names must match the last key of the params hash for mass assignment. If I named the attribute **pwd** `<input type="text" name="user[pwd]">` while the table column is named `:password` I would get the following error:
+Column names must match the last key of the params hash for mass assignment. 
+
+1. Line 6 `:name` matches the last key of the `name=` attribute 
+`<input type="text" name="user[name]"/>`
+
+2. Line 5 `:email` matches the last key of the `name=` attribute
+`<input type="text" name="user[email]"/>`
+
+3. Line 4 `:password` matches the last key of the `name=` attribute `<input type="text" name="user[password]"/>`
+
+If I named the attribute **pwd** `<input type="text" name="user[pwd]">` while the table column is named `:password` I would get the following error:
 
 ![image](http://jisukim82.github.io/images/unknown_attribute.png)
 
-
-Thus the column names match up with the last key of the params hash.
-
-1. Line 6 `:name` matches the last key `<input type="text" name="user[name]"/>`
-
-2. Line 5 `:email` matches the last key `<input type="text" name="user[email]"/>`
-
-3. Line 4 `:password` matches the last key `<input type="text" name="user[password]"/>`
-
-
-
-
-
-
-
-
-
-
+Therefore the column names from the migration table must match the last key of the params hash.
 
 
 
