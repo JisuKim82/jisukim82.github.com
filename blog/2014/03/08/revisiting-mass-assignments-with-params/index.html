@@ -253,11 +253,11 @@
 
 <p>Notice within the <strong>&lt;input></strong> controls: <code>name="user[name]"</code>, <code>name="user[email]"</code>, <code>name="user[password]"</code>. Using this naming convention we are able to get back the desired params hash because both <strong>user</strong> and <strong>[attribute]</strong> are keys to the input value.</p>
 
-<p>Also because our naming covention will return a hash &ndash; the order of which the form labels are arranged does not affect the mass assignment. However, the last key value must be identical to the column name of the attribute assigned.</p>
+<p>Also because our naming convention will return a hash &ndash; the order of which the form labels are arranged does not affect the mass assignment. However, the last key value must be identical to the column name of the attribute assigned.</p>
 
 <p>Based on the naming convention above our migration table should look like below</p>
 
-<p>(<em>Note</em>: I mixed up the order of the columns to show that order doesn&rsquo;t matter but the name attributes <strong>must</strong> match the last key of the params hash)</p>
+<p>(<em>Note</em>: I mixed up the order of the columns to show that order doesn&rsquo;t matter but the column names <strong>must</strong> match the last key of the params hash)</p>
 
 <figure class='code'><figcaption><span>01_create_users.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -282,18 +282,22 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Column names must match the last key of the params hash for mass assignment. If I named the attribute <strong>pwd</strong> <code>&lt;input type="text" name="user[pwd]"&gt;</code> while the table column is named <code>:password</code> I would get the following error:</p>
+<p>Column names must match the last key of the params hash for mass assignment.</p>
+
+<ol>
+<li><p>Line 6 <code>:name</code> matches the last key of the <code>name=</code> attribute
+<code>&lt;input type="text" name="user[name]"/&gt;</code></p></li>
+<li><p>Line 5 <code>:email</code> matches the last key of the <code>name=</code> attribute
+<code>&lt;input type="text" name="user[email]"/&gt;</code></p></li>
+<li><p>Line 4 <code>:password</code> matches the last key of the <code>name=</code> attribute <code>&lt;input type="text" name="user[password]"/&gt;</code></p></li>
+</ol>
+
+
+<p>If I named the attribute <strong>pwd</strong> <code>&lt;input type="text" name="user[pwd]"&gt;</code> while the table column is named <code>:password</code> I would get the following error:</p>
 
 <p><img src="http://jisukim82.github.io/images/unknown_attribute.png" alt="image" /></p>
 
-<p>Thus the column names match up with the last key of the params hash.</p>
-
-<ol>
-<li><p>Line 6 <code>:name</code> matches the last key <code>&lt;input type="text" name="user[name]"/&gt;</code></p></li>
-<li><p>Line 5 <code>:email</code> matches the last key <code>&lt;input type="text" name="user[email]"/&gt;</code></p></li>
-<li><p>Line 4 <code>:password</code> matches the last key <code>&lt;input type="text" name="user[password]"/&gt;</code></p></li>
-</ol>
-
+<p>Therefore the column names from the migration table must match the last key of the params hash.</p>
 </div>
 
 
