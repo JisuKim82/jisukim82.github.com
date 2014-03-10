@@ -9,7 +9,7 @@
   <meta name="author" content="Jisu Kim">
 
   
-  <meta name="description" content="This past week was a bit hectic for me considering the pace picked up at the Flatiron School and on top I had to prepare for a meetup. I managed to &hellip;">
+  <meta name="description" content="Considering there isn&rsquo;t much information on params I wanted to write a blog post on it. However during the past week at the Flatiron School, we &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +65,244 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/03/08/revisiting-mass-assignments-with-params/">Revisiting Mass Assignments With Params</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-08T23:25:26-05:00" pubdate data-updated="true">Mar 8<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Considering there isn&rsquo;t much information on params I wanted to write a blog post on it. However during the past week at the Flatiron School, we were forwarded two informative blog posts on params. You can check them out here:</p>
+
+<p><a href="http://codefol.io/posts/How-Does-Rack-Parse-Query-Params-With-parse-nested-query">http://codefol.io/posts/How-Does-Rack-Parse-Query-Params-With-parse-nested-query</a></p>
+
+<p><a href="http://surrealdetective.github.io/blog/2013/07/01/the-nested-ruby-params-hash-for-complex-html-forms-and-sinatra/">http://surrealdetective.github.io/blog/2013/07/01/the-nested-ruby-params-hash-for-complex-html-forms-and-sinatra/</a></p>
+
+<p>Rather than reinvent the wheel I decided to add to the material mentioned in the blog posts above. One of the key points we learned during lecture was to use proper naming conventions so that we could do a mass assignment with params. For example:</p>
+
+<figure class='code'><figcaption><span>users_controller.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">UsersController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">get</span> <span class="s1">&#39;/users/new&#39;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">erb</span> <span class="ss">:&quot;users/new.html&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">post</span> <span class="s1">&#39;/users&#39;</span> <span class="k">do</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="vi">@user</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'>      <span class="vi">@user</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">params</span><span class="o">[</span><span class="ss">:name</span><span class="o">]</span>
+</span><span class='line'>      <span class="vi">@user</span><span class="o">.</span><span class="n">email</span> <span class="o">=</span> <span class="n">params</span><span class="o">[</span><span class="ss">:email</span><span class="o">]</span>
+</span><span class='line'>      <span class="vi">@user</span><span class="o">.</span><span class="n">password</span> <span class="o">=</span> <span class="n">params</span><span class="o">[</span><span class="ss">:password</span><span class="o">]</span>
+</span><span class='line'>      <span class="vi">@user</span><span class="o">.</span><span class="n">save</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">redirect</span> <span class="s2">&quot;/users/</span><span class="si">#{</span><span class="vi">@user</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">get</span> <span class="s1">&#39;/users/:id&#39;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="vi">@user</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:id</span><span class="o">]</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">erb</span> <span class="ss">:&quot;users/show.html&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Using mass assignment, lines 10-12 above can be replaced with <code>@user=User.new(params[:user])</code> resulting in the following.</p>
+
+<figure class='code'><figcaption><span>users_controller.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">UsersController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">get</span> <span class="s1">&#39;/users/new&#39;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">erb</span> <span class="ss">:&quot;users/new.html&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">post</span> <span class="s1">&#39;/users&#39;</span> <span class="k">do</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="vi">@user</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:user</span><span class="o">]</span><span class="p">)</span>
+</span><span class='line'>      <span class="vi">@user</span><span class="o">.</span><span class="n">save</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">redirect</span> <span class="s2">&quot;/users/</span><span class="si">#{</span><span class="vi">@user</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">get</span> <span class="s1">&#39;/users/:id&#39;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="vi">@user</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:id</span><span class="o">]</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">erb</span> <span class="ss">:&quot;users/show.html&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>There are only three attributes(name, email, password) but as attributes are added one can quickly see how mass assignment will be useful.</p>
+
+<p>Using the same example, the trick to utilizing mass assignment is to get params to return a hash with the following structure:</p>
+
+<figure class='code'><figcaption><span>users_controller.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">params</span> <span class="o">==</span> <span class="p">{</span>
+</span><span class='line'>            <span class="ss">:user</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>              <span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s2">&quot;John Doe&quot;</span><span class="p">,</span>
+</span><span class='line'>              <span class="ss">:email</span> <span class="o">=&gt;</span> <span class="s2">&quot;john.doe@flatironschool.com&quot;</span><span class="p">,</span>
+</span><span class='line'>              <span class="ss">:password</span> <span class="o">=&gt;</span> <span class="s2">&quot;123456&quot;</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>          <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<p> To get params to have that type of structure, one needs to properly name the form inputs for the name attribute.</p>
+
+<figure class='code'><figcaption><span>new.html.erb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">&quot;/users&quot;</span> <span class="na">method=</span><span class="s">&quot;POST&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;p&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;label</span> <span class="na">for=</span><span class="s">&quot;name&quot;</span><span class="nt">&gt;</span>Name<span class="nt">&lt;/label&gt;&lt;br/&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">name=</span><span class="s">&quot;user[name]&quot;</span> <span class="na">id=</span><span class="s">&quot;name&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/p&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;p&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;label</span> <span class="na">for=</span><span class="s">&quot;email&quot;</span><span class="nt">&gt;</span>Email<span class="nt">&lt;/label&gt;&lt;br/&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">name=</span><span class="s">&quot;user[email]&quot;</span> <span class="na">id=</span><span class="s">&quot;email&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/p&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;p&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;label</span> <span class="na">for=</span><span class="s">&quot;pwd&quot;</span><span class="nt">&gt;</span>Password<span class="nt">&lt;/label&gt;&lt;br/&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">name=</span><span class="s">&quot;user[password]&quot;</span> <span class="na">id=</span><span class="s">&quot;pwd&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/p&gt;</span>
+</span><span class='line'>   <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;submit&quot;</span> <span class="na">value=</span><span class="s">&quot;Submit&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'><span class="nt">&lt;/form&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Notice within the <strong>&lt;input></strong> controls: <code>name="user[name]"</code>, <code>name="user[email]"</code>, <code>name="user[password]"</code>. Using this naming convention we are able to get back the desired params hash because both <strong>user</strong> and <strong>[attribute]</strong> are keys to the input value.</p>
+
+<p>Also because our naming covention will return a hash &ndash; the order of which the form labels are arranged does not affect the mass assignment. However, the last key value must be identical to the column name of the attribute assigned.</p>
+
+<p>Based on the naming convention above our migration table should look like below</p>
+
+<p>(<em>Note</em>: I mixed up the order of the columns to show that order doesn&rsquo;t matter but the name attributes <strong>must</strong> match the last key of the params hash)</p>
+
+<figure class='code'><figcaption><span>01_create_users.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">CreateUsers</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Migration</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">change</span>
+</span><span class='line'>    <span class="n">create_table</span> <span class="ss">:users</span> <span class="k">do</span> <span class="o">|</span><span class="n">t</span><span class="o">|</span>
+</span><span class='line'>      <span class="n">t</span><span class="o">.</span><span class="n">string</span> <span class="ss">:password</span>  <span class="c1">#order does not have to match the &lt;form&gt; inputs </span>
+</span><span class='line'>      <span class="n">t</span><span class="o">.</span><span class="n">string</span> <span class="ss">:email</span>
+</span><span class='line'>      <span class="n">t</span><span class="o">.</span><span class="n">string</span> <span class="ss">:name</span>
+</span><span class='line'>      <span class="n">t</span><span class="o">.</span><span class="n">timestamp</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Column names must match the last key of the params hash for mass assignment. If I named the attribute <strong>pwd</strong> <code>&lt;input type="text" name="user[pwd]"&gt;</code> while the table column is named <code>:password</code> I would get the following error:</p>
+
+<p><img src="http://jisukim82.github.io/images/unknown_attribute.png" alt="image" /></p>
+
+<p>Thus the column names match up with the last key of the params hash.</p>
+
+<ol>
+<li><p>Line 6 <code>:name</code> matches the last key <code>&lt;input type="text" name="user[name]"/&gt;</code></p></li>
+<li><p>Line 5 <code>:email</code> matches the last key <code>&lt;input type="text" name="user[email]"/&gt;</code></p></li>
+<li><p>Line 4 <code>:password</code> matches the last key <code>&lt;input type="text" name="user[password]"/&gt;</code></p></li>
+</ol>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -336,6 +574,10 @@ In line 4 the last argument <strong>&lsquo;name&rsquo;</strong> is not a variabl
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/03/08/revisiting-mass-assignments-with-params/">Revisiting Mass Assignments With Params</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/02/23/my-aha-moments-from-the-weekend/">My &#8216;Aha&#8217; Moments From the Weekend</a>
