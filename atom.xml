@@ -4,7 +4,7 @@
   <title><![CDATA[Jisu's Blog]]></title>
   <link href="http://JisuKim82.github.io/atom.xml" rel="self"/>
   <link href="http://JisuKim82.github.io/"/>
-  <updated>2014-03-10T00:01:00-04:00</updated>
+  <updated>2014-05-04T20:24:10-04:00</updated>
   <id>http://JisuKim82.github.io/</id>
   <author>
     <name><![CDATA[Jisu Kim]]></name>
@@ -12,6 +12,17 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[NYC Big Apps 2014]]></title>
+    <link href="http://JisuKim82.github.io/blog/2014/05/04/nyc-big-apps-2014/"/>
+    <updated>2014-05-04T19:59:25-04:00</updated>
+    <id>http://JisuKim82.github.io/blog/2014/05/04/nyc-big-apps-2014</id>
+    <content type="html"><![CDATA[<p>Last week when I was trying to figure out when the rain would stop I decided to check weather.com and this was what I saw.</p>
+
+<p><img src="http://jisukim82.github.io/images/screenshot-2014-04-30.png" alt="image" /></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Revisiting Mass Assignments With Params]]></title>
